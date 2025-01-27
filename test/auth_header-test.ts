@@ -1,24 +1,24 @@
-var auth_hdr = require('../lib/auth_header')
+import { parse } from '../lib/auth_header'
 import { describe, it } from 'vitest'
 
 describe('Parsing Auth Header field-value', function () {
   it('Should handle single space separated values', function () {
-    var res = auth_hdr.parse('SCHEME VALUE')
+    var res = parse('SCHEME VALUE')
     expect(res).to.deep.equal({ scheme: 'SCHEME', value: 'VALUE' })
   })
 
   it('Should handle CRLF separator', function () {
-    var res = auth_hdr.parse('SCHEME\nVALUE')
+    var res = parse('SCHEME\nVALUE')
     expect(res).to.deep.equal({ scheme: 'SCHEME', value: 'VALUE' })
   })
 
   it('Should handle malformed authentication headers with no scheme', function () {
-    var res = auth_hdr.parse('malformed')
+    var res = parse('malformed')
     expect(res).to.not.be.ok
   })
 
   it('Should return null when the auth header is not a string', function () {
-    var res = auth_hdr.parse({})
+    var res = parse({})
     expect(res).to.be.null
   })
 })
