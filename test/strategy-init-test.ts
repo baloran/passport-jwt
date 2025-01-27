@@ -1,4 +1,4 @@
-var Strategy = require('../lib/strategy')
+import Strategy from '../lib/strategy'
 import { describe, it } from 'vitest'
 
 describe('Strategy', function () {
@@ -13,6 +13,7 @@ describe('Strategy', function () {
 
   it('should throw if constructed without a verify callback', function () {
     expect(function () {
+      // @ts-expect-error
       var s = new Strategy({
         jwtFromRequest: function (r) {},
         secretOrKey: 'secret',
@@ -31,6 +32,7 @@ describe('Strategy', function () {
 
   it('should throw if constructed with both a secretOrKey and a secretOrKeyProvider', function () {
     expect(function () {
+      // @ts-expect-error
       var s = new Strategy({
         secretOrKey: 'secret',
         secretOrKeyProvider: function (req, token, done) {},

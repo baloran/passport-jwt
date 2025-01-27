@@ -1,8 +1,7 @@
-var passport = require('passport-strategy'),
-  auth_hdr = require('./auth_header'),
-  util = require('util'),
-  url = require('url'),
-  assign = require('./helpers/assign.js')
+import passport from 'passport-strategy'
+import util from 'util'
+import assign from './helpers/assign'
+import JwtVerifier from './verify_jwt'
 
 /**
  * Strategy constructor
@@ -57,7 +56,7 @@ function JwtStrategy(options, verify) {
   }
 
   this._passReqToCallback = options.passReqToCallback
-  var jsonWebTokenOptions = options.jsonWebTokenOptions || {}
+  const jsonWebTokenOptions = options.jsonWebTokenOptions || {}
   //for backwards compatibility, still allowing you to pass
   //audience / issuer / algorithms / ignoreExpiration
   //on the options.
@@ -78,15 +77,15 @@ util.inherits(JwtStrategy, passport.Strategy)
  *
  * Note that this should only be replaced in tests.
  */
-JwtStrategy.JwtVerifier = require('./verify_jwt')
+JwtStrategy.JwtVerifier = JwtVerifier
 
 /**
  * Authenticate request based on JWT obtained from header or post body
  */
 JwtStrategy.prototype.authenticate = function (req, options) {
-  var self = this
+  const self = this
 
-  var token = self._jwtFromRequest(req)
+  const token = self._jwtFromRequest(req)
 
   if (!token) {
     return self.fail(new Error('No auth token'))
@@ -109,7 +108,7 @@ JwtStrategy.prototype.authenticate = function (req, options) {
               return self.fail(jwt_err)
             } else {
               // Pass the parsed token to the user
-              var verified = function (err, user, info) {
+              const verified = function (err, user, info) {
                 if (err) {
                   return self.error(err)
                 } else if (!user) {
@@ -139,4 +138,4 @@ JwtStrategy.prototype.authenticate = function (req, options) {
 /**
  * Export the Jwt Strategy
  */
-module.exports = JwtStrategy
+export default JwtStrategy
